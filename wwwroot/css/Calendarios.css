@@ -1,0 +1,22 @@
+﻿#DataLocacao {
+    padding-left: 30px;
+}
+
+
+#DataFim {
+    padding-left: 30px;
+}
+
+#LocEquiDtInicio {
+    padding-left: 30px;
+}
+
+#LocEquiDtFim {
+    padding-left: 30px;
+}
+
+#spanCalendar {
+    top: -32px;
+    position: relative;
+    margin-left: 10px;
+}

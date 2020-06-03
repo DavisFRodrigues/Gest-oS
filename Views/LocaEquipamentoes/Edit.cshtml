@@ -1,0 +1,76 @@
+﻿@model GestaoS.Models.LocaEquipamento
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Editar</h1>
+
+<h4>Locação</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="IdFilial" class="control-label">Filial</label>
+                <select asp-for="IdFilial" id="IdFilialBusca" asp-items="(IEnumerable<SelectListItem>)ViewBag.IdFilial" class="form-control">
+                    <option value="">Selecione uma Filial</option>
+                </select>
+                <span asp-validation-for="IdFilial" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdSala" class="control-label">Sala</label>
+                <select asp-for="IdSala" class="form-control" asp-items="(IEnumerable<SelectListItem>)ViewBag.IdSala"></select>
+                <span asp-validation-for="IdSala" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdEquipamento" class="control-label">Equipamento</label>
+                <select asp-for="IdEquipamento" class="form-control" asp-items="(IEnumerable<SelectListItem>)ViewBag.IdEquipamento"></select>
+                <span asp-validation-for="IdEquipamento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Qtde" class="control-label"></label>
+                <input id="QtdeEqui" asp-for="Qtde"  class="form-control" />
+                <span asp-validation-for="Qtde" class="text-danger"></span>
+            </div>
+            <div class="form-group date">
+                <label asp-for="DtInicio" class="control-label"></label>
+                <input asp-for="DtInicio" type="text" class="form-control" id="LocEquiDtInicio"/>
+                <span asp-validation-for="DtInicio" class="fa fa-calendar" id="spanCalendar"></span>
+            </div>
+            <div class="form-group date">
+                <label asp-for="DtFim" class="control-label"></label>
+                <input asp-for="DtFim" type="text" class="form-control" id="LocEquiDtFim"/>
+                <span asp-validation-for="DtFim" class="fa fa-calendar" id="spanCalendar"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class="form-control" asp-items="(IEnumerable<SelectListItem>)ViewBag.UserId"></select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TelResponsavel" class="control-label"></label>
+                <input asp-for="TelResponsavel" class="form-control" id="tel" />
+                <span asp-validation-for="TelResponsavel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Setor" class="control-label"></label>
+                <input asp-for="Setor" class="form-control" />
+                <span asp-validation-for="Setor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index"><i class="fa fa-rotate-left fa-fw" aria-hidden="true"></i>Voltar a lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

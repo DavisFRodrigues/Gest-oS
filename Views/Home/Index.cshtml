@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "GestaoS";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Bem Vindo!</h1>
+    <p> <a href="">Aqui será incluso a logo.</a>.</p>
+</div>
+
+<div class="modal fade" id="myModalUser" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div id="ConteudoModal">
+
+                    @Html.Raw(TempData["msgUsuario"])
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+        $(function () {
+            if('@TempData["msgUsuario"]' != "") {
+                $('#myModalUser').modal('show');
+            }
+        });
+
+</script>
+
+
+
+@*<script type="text/javascript">
+
+
+            document.addEventListener('DOMContentLoaded', function () {
+                if (Notification.permission !== 'granted')
+                    Notification.requestPermission();
+
+
+            });
+
+
+        function notifyMe(icon, title, mensagem, link) {
+            if (!Notification) {
+
+                alert('O navegador que você esta utilizando não possui o notifications.Tente o Chrome');
+                return;
+            }
+
+            if (Notification.permission !== "granted") {
+                Notification.requestPermission();
+
+
+            } else {
+                var notification = new Notification(title, {
+                    icon: icon,
+                    body:mensagem
+                });
+
+                notification.onclick = function () {
+
+                    window.open(link);
+                };
+            }
+        }
+
+        var icon ='~/TCC/V6/GestaoS/wwwroot/images/a1-_edited.jpg';
+        var title = 'Usuários sem perfil';
+        var mensagem = 'Temos usuários sem perfil definido, clique aqui para verificar.';
+        var link = '/PerfilUsuarios/Create/';
+        setTimeout(function () { notifyMe(icon, title, mensagem, link); },5000);
+
+
+
+
+    </script>*@

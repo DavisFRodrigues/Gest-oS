@@ -1,0 +1,98 @@
+﻿@model GestaoS.Models.LocaEquipamento
+
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Locação de Equipamento</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" autocomplete="off">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdFilial" class="control-label">Filial</label>
+                <select asp-for="IdFilial" id="IdFilialBusca" asp-items="(IEnumerable<SelectListItem>)ViewBag.IdFilial" class="form-control">
+                    <option value="">Selecione uma Filial</option>
+                </select>
+                <span asp-validation-for="IdFilial" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdSala" class="control-label">Sala</label>
+                <select id="IdSalaBusca" asp-for="IdSala" class="form-control"></select>
+                <span asp-validation-for="IdSala" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdEquipamento" class="control-label">Equipamento</label>
+                <select asp-for="IdEquipamento" asp-items="(IEnumerable<SelectListItem>)ViewBag.IdEquipamento" class="form-control">
+                    <option value="">Selecione um Equipamento</option>
+                </select>
+                <span asp-validation-for="IdEquipamento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Qtde" class="control-label"></label>
+                <input id="QtdeEqui" asp-for="Qtde" class="form-control" />
+                <span asp-validation-for="Qtde" class="text-danger"></span>
+            </div>
+            <div class="form-group date">
+                <label asp-for="DtInicio" class="control-label"></label>
+                <input asp-for="DtInicio" type="text" class="form-control" id="LocEquiDtInicio" />
+                <span asp-validation-for="DtInicio" class="fa fa-calendar" id="spanCalendar"></span>
+            </div>
+            <div class="form-group date">
+                <label asp-for="DtFim" class="control-label"></label>
+                <input asp-for="DtFim" type="text" class="form-control" id="LocEquiDtFim" />
+                <span asp-validation-for="DtFim" class="fa fa-calendar" id="spanCalendar"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TelResponsavel" class="control-label"></label>
+                <input asp-for="TelResponsavel" class="form-control" id="tel" />
+                <span asp-validation-for="TelResponsavel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Setor" class="control-label"></label>
+                <input asp-for="Setor" class="form-control" />
+                <span asp-validation-for="Setor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Cadastrar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index"><i class="fa fa-rotate-left fa-fw" aria-hidden="true"></i>Voltar a lista</a>
+</div>
+
+<div class="modal fade" id="Alert" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div id="ConteudoModal">
+
+                    <div id="TextAlert"></div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

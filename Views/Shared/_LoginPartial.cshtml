@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+       <a><i id="Notificacao"class="fa fa-bell-o fa"  aria-hidden="true" data-container="body" data-toggle="popover" data-placement="bottom" 
+             data-content=""></i></a>
+        <span class="menu-badge badge-bounce">@TempData["QtdeSemPerfil"]</span>
+
+    </li>
+    
+    
+    
+    
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-page="" title="Manage" id="BuscaPerfil">
+            Olá, @{ var nome = ((await UserManager.FindByNameAsync(User.Identity.Name)).NomeCompleto);
+                string Nome1 = nome.Replace(' ', '-');
+                string[] Nome = Nome1.Split('-');
+            } @(Nome[0])!
+        </a>
+
+</li>
+
+<li class="nav-item">
+        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button  type="submit" class="nav-link btn btn-link text-dark">Sair</button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Registre-se</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </li>
+}
+</ul>
+
+    

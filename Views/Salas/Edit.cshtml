@@ -1,0 +1,54 @@
+﻿@model GestaoS.Models.Sala
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Editar</h1>
+
+<h4>Sala</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Capacidade" class="control-label"></label>
+                <input asp-for="Capacidade" class="form-control" />
+                <span asp-validation-for="Capacidade" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdFilial" class="control-label">Filial</label>
+                <select asp-for="IdFilial" id="IdFilialBusca" asp-items="ViewBag.IdFilial" class="form-control"></select>
+                <span asp-validation-for="IdFilial" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Multimidia" /> @Html.DisplayNameFor(model => model.Multimidia)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Wifi" /> @Html.DisplayNameFor(model => model.Wifi)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index"><i class="fa fa-rotate-left fa-fw" aria-hidden="true"></i>Voltar a lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

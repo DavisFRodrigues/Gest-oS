@@ -1,0 +1,12 @@
+﻿.botao {
+    width:300px;
+    
+}
+.botao_menos span{
+    background-color:brown;
+}
+.botao_mais{
+    background-color:forestgreen;
+    position:relative;
+    margin-top:-5px;
+}

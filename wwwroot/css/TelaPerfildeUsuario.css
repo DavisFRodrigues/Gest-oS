@@ -1,0 +1,23 @@
+﻿
+
+#demo_icon {
+    
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    height:60px;
+    padding-top:15px;
+    padding-left:20px;
+    background-color:#e1dbdb;
+    box-shadow:3px;
+    
+    
+}
+#demo {
+    border: 1px solid #e1dbdb;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding-left:50px;
+}
+#Box_Perfil{
+    
+}

@@ -1,0 +1,39 @@
+﻿@model GestaoS.Models.TipoUsuario
+
+@{
+    ViewData["Title"] = "Editar";
+}
+
+<h1>Editar</h1>
+
+<h4>Tipo de Usuário</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="NomeTipoUsuario" class="control-label">Perfil</label>
+                <input asp-for="NomeTipoUsuario" class="form-control" />
+                <span asp-validation-for="NomeTipoUsuario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index"><i class="fa fa-rotate-left fa-fw" aria-hidden="true"></i>Voltar a lista</a>
+</div>
+
+
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
