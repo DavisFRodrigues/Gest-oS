@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-8">
-        <form asp-action="Edit">
+        <form asp-action="Edit" autocomplete="off">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -22,12 +22,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="IdSala" class="control-label">Sala</label>
-                <select asp-for="IdSala" class="form-control" asp-items="(IEnumerable<SelectListItem>)ViewBag.IdSala"></select>
+                <select id="IdSalaBusca" asp-for="IdSala" class="form-control"></select> @*<select id="IdSalaBusca asp-for="IdSala" class="form-control" asp-items="(IEnumerable<SelectListItem>)ViewBag.IdSala"></select>*@
                 <span asp-validation-for="IdSala" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="IdEquipamento" class="control-label">Equipamento</label>
-                <select asp-for="IdEquipamento" class="form-control" asp-items="(IEnumerable<SelectListItem>)ViewBag.IdEquipamento"></select>
+                <select asp-for="IdEquipamento" id="IdEquipamento" class="form-control" asp-items="(IEnumerable<SelectListItem>)ViewBag.IdEquipamento"></select>
                 <span asp-validation-for="IdEquipamento" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -35,7 +35,7 @@
                 <input id="QtdeEqui" asp-for="Qtde"  class="form-control" />
                 <span asp-validation-for="Qtde" class="text-danger"></span>
             </div>
-            <div class="form-group date">
+            <div class="form-group">
                 <label asp-for="DtInicio" class="control-label"></label>
                 <input asp-for="DtInicio" type="text" class="form-control" id="LocEquiDtInicio"/>
                 <span asp-validation-for="DtInicio" class="fa fa-calendar" id="spanCalendar"></span>
@@ -73,4 +73,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
 }

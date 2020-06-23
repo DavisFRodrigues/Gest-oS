@@ -128,15 +128,288 @@
 
                 console.log(id);
 
-                $('#ConteudoModal').load('/LocaEquipamentoes/Edit/' + id, function () {
+                $('#ConteudoModal').load('/SiteGestaoS/LocaEquipamentoes/Edit/' + id, function () {
 
                     $('#ExemploModalCentralizado').modal();
 
-                });
+
+                    /////////////SALA POR FILIAL   /////////////////////////////
+
+                    $(document).ready(function () {
+
+                        $.ajax({
+                            url: '/SiteGestaoS/LocaEquipamentoes/ObterListaLocacaoEdit/',
+                            type: "GET",
+                            dataType: "json",
+                            data: {
+                                idLocacaoEdit: id
+                            },
+                            success: function (data) {
+
+                                if (data.length > 0) {
+
+                                    //for (var i = 0; i < data.length; i++) {
 
 
 
-            });
+                                    $(data).each(function () {
+                                        $("#IdSalaBusca").append($('<option value=0></option>', { value: this.ID }).html(this.Nome));
+                                        //$("#IdSalaBusca").append($('<option></option>', { value: this.ID }).html(this.Nome));
+                                    });
+
+                                    //}
+
+                                }
+                            },
+
+
+                            error: function (data) {
+                                // em caso de erro...
+                                console.log(error);
+                            },
+
+                            complete: function () {
+                                // ao final da requisição...
+                                $("#carregando").hide();
+                            }
+
+
+                        });
+
+
+                    });
+
+
+
+
+                    $(document).ready(function () {
+                        $('#IdFilialBusca').change(function () {
+                            var idFilial = $('#IdFilialBusca').val();
+
+                            if (idFilial !== this.IdFilial) {
+
+                                $.ajax({
+                                    url: '/SiteGestaoS/LocaEquipamentoes/ObterSala/',
+                                    type: "GET",
+                                    dataType: "json",
+                                    data: {
+                                        idFilial: idFilial
+                                    },
+                                    success: function (data) {
+
+                                        if (data.length > 0) {
+
+                                            for (var i = 0; i < data.length; i++) {
+
+                                                $('#IdSalaBusca').empty();
+                                                // $('#IdSalaBusca').append('<option value="' + data[i].id + '">' + data[i].nome + '</option>');
+
+                                                $("#IdSalaBusca").append('<option value=0>Selecione uma Sala</option>');
+                                                $(data).each(function () {
+                                                    $("#IdSalaBusca").append($('<option></option>', { value: this.id }).html(this.nome));
+                                                });
+
+                                            }
+
+                                        }
+                                    },
+
+
+                                    error: function (data) {
+                                        // em caso de erro...
+                                        console.log(error);
+                                    },
+
+                                    complete: function () {
+                                        // ao final da requisição...
+                                        $("#carregando").hide();
+                                    }
+
+
+                                });
+                            }
+
+                        });
+                    });
+                    /////////////////////////////////////
+                    //////////////////QUANTIDADE DE EQUIPAMENTO//////////////////////
+                    //$(document).ready(function () {
+
+                    $(document).ready(function () {
+                        $.ajax({
+                            url: '/SiteGestaoS/LocaEquipamentoes/QtdeEquipamentoEdit/',
+                            type: "GET",
+                            dataType: "json",
+                            data: {
+                                IdEquipamentoQtdeEdit: id
+                            },
+                            success: function (data) {
+
+                                if (data.length > 0) {
+                                    var Disponivel = data[0].QTDE_DISPONIVEL
+
+                                    $('#QtdeEqui').change(function () {
+                                        var quantiEqui = $('#QtdeEqui').val();
+
+                                        if (Disponivel > quantiEqui) {
+
+
+
+                                        }
+                                        else {
+
+
+                                            alert('A quantidade de equipamento disponível é: ' + Disponivel);
+                                            $('#QtdeEqui').val(Disponivel);
+                                            //$('#TextAlert').text("A quantidade de equipamento disponível é: " + Disponivel);
+                                            //$('#Alert').modal('show');
+                                            //$('#QtdeEqui').val(Disponivel);
+
+
+                                        }
+
+                                    });
+
+                                }
+                               
+                            },
+
+
+
+
+                            error: function (data) {
+                                // em caso de erro...
+                                console.log(error);
+                            },
+
+                            complete: function () {
+                                // ao final da requisição...
+                                $("#carregando").hide();
+                            }
+
+                        });
+                    });
+
+
+
+
+                    $(document).ready(function () {
+                        
+                            $('#IdEquipamento').change(function () {
+                                var IdEquipamentoQtde = $('#IdEquipamento').val();
+
+                                console.log(IdEquipamentoQtde);
+                                document.getElementById('QtdeEqui').value = '';
+                                
+                                   
+
+                                    $('#QtdeEqui').change(function () {
+                                        
+                                        var quantiEqui = $('#QtdeEqui').val();
+
+                                        console.log(quantiEqui);
+
+
+                                        $.ajax({
+                                            url: '/SiteGestaoS/LocaEquipamentoes/QtdeEquipamento/',
+                                            type: "GET",
+                                            dataType: "json",
+                                            data: {
+                                                IdEquipamentoQtde: IdEquipamentoQtde
+                                            },
+                                            success: function (data) {
+
+
+                                                if (data.length > 0) {
+                                                    console.log(data[0].QTDE_DISPONIVEL);
+
+                                                    var Disponivel = data[0].QTDE_DISPONIVEL
+
+
+                                                    if (Disponivel > quantiEqui) {
+
+
+
+                                                    }
+                                                    else {
+
+
+                                                        $(function () {
+
+                                                            alert('A quantidade de equipamento disponível é: ' + Disponivel);
+                                                            $('#QtdeEqui').val(Disponivel);
+
+                                                            //$('#TextAlert').text("A quantidade de equipamento disponível é: " + Disponivel);
+                                                            //$('#Alert').modal('show');
+                                                            //$('#QtdeEqui').val(Disponivel);
+
+                                                        });
+
+
+
+                                                    }
+
+                                                }
+
+
+                                            },
+
+
+                                            error: function (data) {
+                                                // em caso de erro...
+                                                console.log(error);
+                                            },
+
+                                            complete: function () {
+                                                // ao final da requisição...
+                                                $("#carregando").hide();
+                                            }
+
+
+                                        });
+                                    });
+
+                                
+
+                          });
+
+                        
+                     });
+               
+                 });
+
+             });
+                    /////////////////////////////////////////
+
+
+                    $('#LocEquiDtInicio').datepicker({
+
+                        format: 'dd/mm/yyyy',
+                        ////dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
+                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                        ////dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        ////monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        ////monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        language: "pt-BR",
+                        startDate: '+0'
+                    });
+                    $('#LocEquiDtFim').datepicker({
+
+                        format: 'dd/mm/yyyy',
+                        //dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
+                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                        //dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        //monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        //monthNamesShort ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        language: "pt-BR",
+                        startDate: '+0'
+                    });
+
+           
+
+
+                
+            
         });
 
 
@@ -152,7 +425,7 @@
 
                 console.log(id);
 
-                $('#ConteudoModal').load('/LocaEquipamentoes/Delete/' + id, function () {
+                $('#ConteudoModal').load('/SiteGestaoS/LocaEquipamentoes/Delete/' + id, function () {
 
                     $('#ExemploModalCentralizado').modal();
 

@@ -15,23 +15,23 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="IdFilial" class="control-label">Filial</label>
-                <select asp-for="IdFilial" class="form-control" asp-items="ViewBag.IdFilial"></select>
-                <span asp-validation-for="IdFilial" class="text-danger"></span>
+                <select asp-for="IdFilial" id="IdFilialBusca" asp-items="(IEnumerable<SelectListItem>)ViewBag.IdFilial" class="form-control"></select>
+                    <span asp-validation-for="IdFilial" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="IdSala" class="control-label">Sala</label>
-                <select asp-for="IdSala" class="form-control" asp-items="ViewBag.IdSala"></select>
+                <select id="IdSalaBusca" asp-for="IdSala" class="form-control"></select> @*<select asp-for="IdSala" id="IdSalaBusca" asp-items="(IEnumerable<SelectListItem>)ViewBag.IdSala" class="form-control"></select>*@
                 <span asp-validation-for="IdSala" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group date">
                 <label asp-for="DtInicio" class="control-label"></label>
-                <input asp-for="DtInicio" class="form-control" />
-                <span asp-validation-for="DtInicio" class="text-danger"></span>
+                <input asp-for="DtInicio" type="text" class="form-control" id="DataLocacao" />
+                <span asp-validation-for="DtInicio"  class="fa fa-calendar" id="spanCalendar"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group date">
                 <label asp-for="DtFim" class="control-label"></label>
-                <input asp-for="DtFim" class="form-control" />
-                <span asp-validation-for="DtFim" class="text-danger"></span>
+                <input asp-for="DtFim" type="text" class="form-control" id="DataFim"/>
+                <span asp-validation-for="DtFim" class="fa fa-calendar" id="spanCalendar"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
@@ -85,7 +85,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-  <script>
+    <script>
 
     $(function () {
     if ('@ViewBag.msg' != "") {
@@ -94,6 +94,8 @@
     });
 
     </script>
+
+   
 }
 
 

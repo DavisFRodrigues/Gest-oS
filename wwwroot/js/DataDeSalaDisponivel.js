@@ -11,7 +11,7 @@
             if (IdSala > 0) {
 
                 $.ajax({
-                    url: '/LocaSalas/DataLocacaoSala/',
+                    url: '/SiteGestaoS/LocaSalas/DataLocacaoSala/',
                     type: "GET",
                     dataType: "json",
                     data: {
@@ -73,6 +73,10 @@
             }
 
         });
+  });
+
+    $("#DataLocacao").change(function () {
+        alert($("#DataLocacao").datepicker('getDate'));
     });
 });
 
@@ -95,7 +99,7 @@ $('#IdSalaBusca').change(function () {
         if (IdSala > 0) {
 
             $.ajax({
-                url: '/LocaSalas/DataLocacaoSalaFim/',
+                url: '/SiteGestaoS/LocaSalas/DataLocacaoSalaFim/',
                 type: "GET",
                 dataType: "json",
                 data: {

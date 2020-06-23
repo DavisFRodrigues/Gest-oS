@@ -1,0 +1,67 @@
+﻿@model GestaoS.Models.Devolucao
+
+@{
+    ViewData["Title"] = "Edit";
+}
+    <style>
+        .form-group {
+            width: 200px;
+        }
+    </style>
+
+
+<h1>Editar</h1>
+
+<h4>Devolucao</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="IdLocaEquipamento" class="control-label">Id Locação</label>
+                <input asp-for="IdLocaEquipamento" class="form-control" readonly="readonly" />
+                <span asp-validation-for="IdLocaEquipamento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NomeEquipamento" class="control-label">Equipamento</label>
+                <input asp-for="NomeEquipamento" class="form-control" readonly="readonly" />
+                <span asp-validation-for="NomeEquipamento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NmPatrimonio" class="control-label">Patrimonio</label>
+                <input asp-for="NmPatrimonio" class="form-control" readonly="readonly"/>
+                <span asp-validation-for="NmPatrimonio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataInicio" class="control-label">Data Início</label>
+                <input asp-for="DataInicio" class="form-control" readonly="readonly" id="DataLocacao"/>
+                <span asp-validation-for="DataInicio" class="fa fa-calendar" id="spanCalendar"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataFim" class="control-label">Data Fim</label>
+                <input asp-for="DataFim" class="form-control" readonly="readonly" id="DataFim"/>
+                <span asp-validation-for="DataFim" class="fa fa-calendar" id="spanCalendar"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NomeCompleto" class="control-label">Nome</label>
+                <input asp-for="NomeCompleto" class="form-control" readonly="readonly"/>
+                <span asp-validation-for="NomeCompleto" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Devolvido" /> @Html.DisplayNameFor(model => model.Devolvido)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index"><i class="fa fa-rotate-left fa-fw" aria-hidden="true"></i>Voltar a lista</a>
+</div>
+

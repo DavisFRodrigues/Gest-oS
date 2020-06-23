@@ -15,7 +15,7 @@ namespace GestaoS.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3")
+                .HasAnnotation("ProductVersion", "3.1.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -107,6 +107,41 @@ namespace GestaoS.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("GestaoS.Models.Devolucao", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DataFim")
+                        .HasColumnName("DataFim")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataInicio")
+                        .HasColumnName("DataInicio")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Devolvido")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("IdLocaEquipamento")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NmPatrimonio")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NomeCompleto")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NomeEquipamento")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Devolucao");
                 });
 
             modelBuilder.Entity("GestaoS.Models.Equipamento", b =>

@@ -22,10 +22,37 @@ namespace GestaoS.Controllers
 
         public IActionResult Index()
         {
+            var conn = new SqlConnection(@"Integrated Security=SSPI;Persist Security Info=False;User ID=DAVIS;Initial Catalog=GestaoS;Data Source=DAVIS-RODRIGUES");
+            using (conn)
+            {
+                conn.Open();
+
+
+
+                var ListaSemPerfilQr = conn.Query(@"SELECT NOMECOMPLETO FROM ASPNETUSERS (NOLOCK)
+                                                    WHERE NOT EXISTS(SELECT USERID FROM PerfilUsuario(NOLOCK) WHERE AspNetUsers.Id = UserId)
+                                                    ORDER BY NomeCompleto").ToList();
+
+                conn.Close();
+
+                var Valor = ListaSemPerfilQr.Count();
+
+                var Qtde = Valor.ToString();
+
+                var QtdeUsuario = int.Parse(Qtde);
+
+
+                TempData["QtdeSemPerfil"] = QtdeUsuario;
+
+
+            }
+
+            
+
             return View();
         }
 
-
+      
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

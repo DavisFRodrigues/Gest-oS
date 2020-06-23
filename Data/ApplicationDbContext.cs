@@ -34,5 +34,9 @@ namespace GestaoS.Data
         public DbSet<GestaoS.Models.LocaEquipamento> LocaEquipamento { get; set; }
 
         public DbSet<GestaoS.Models.LocaSala> LocaSala { get; set; }
+
+        public DbSet<GestaoS.Models.Devolucao> Devolucao { get; set; }
+
+        
     }
 }

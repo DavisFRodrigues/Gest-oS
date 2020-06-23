@@ -8,13 +8,22 @@
     <li class="nav-item">
        <a><i id="Notificacao"class="fa fa-bell-o fa"  aria-hidden="true" data-container="body" data-toggle="popover" data-placement="bottom" 
              data-content=""></i></a>
-        <span class="menu-badge badge-bounce">@TempData["QtdeSemPerfil"]</span>
+        <span id="QtdePerfil" class="menu-badge badge-bounce">
+        
+        @{var QtdeV = @TempData["QtdeSemPerfil"];
+            if (QtdeV == null)
+            {
+                QtdeV = 0;
+            }
+        }
+             @(QtdeV)
+        </span>
 
     </li>
-    
-    
-    
-    
+
+
+
+
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-page="" title="Manage" id="BuscaPerfil">
             Olá, @{ var nome = ((await UserManager.FindByNameAsync(User.Identity.Name)).NomeCompleto);

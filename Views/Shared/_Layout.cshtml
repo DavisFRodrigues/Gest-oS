@@ -12,23 +12,24 @@
     <link href="~/css/bootstrap-datepicker.css" rel="stylesheet" />
     <link href="~/css/TelaPerfildeUsuario.css" rel="stylesheet" />
     <link href="~/css/Calendarios.css" rel="stylesheet" />
-    @*<link href="~/datatables.min.css" rel="stylesheet" />*@
+    <link href="~/datatables.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link href="~/DataTables-1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
     <link href="~/Buttons-1.6.2/css/buttons.bootstrap4.min.css" rel="stylesheet" />
-
+    <link href="~/css/ArcordionRelatorios.css" rel="stylesheet" />
     <link href="~/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="~/css/TelaLogin.css" rel="stylesheet" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/datatables.min.js"></script>
 
-    
     <script src="~/DataTables-1.10.21/js/dataTables.bootstrap4.min.js"></script>
     @*<script src="~/Buttons-1.6.2/js/dataTables.buttons.min.js"></script>*@
-    
+
     <script src="~/Buttons-1.6.2/js/buttons.bootstrap4.min.js"></script>
     <script src="~/Responsive-2.2.4/js/responsive.bootstrap4.min.js"></script>
-
+    <script src="~/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/js/bootstrap-datepicker.pt-BR.min.js"></script>
 </head>
 <body>
     <header>
@@ -87,11 +88,12 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <li><a class="dropdown-item" asp-area="" asp-controller="LocaEquipamentoes" asp-action="Index">Loc. Equipamentos</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-controller="LocaSalas" asp-action="Index">Loc. Salas</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Devolucaos" asp-action="Index">Devolução</a></li>
                             </ul>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="https://localhost:44319/SalaPorFilial.aspx">Relatórios</a>
+                            <a class="nav-link" asp-area="" asp-controller="Relatorios" asp-action="Index">Relatórios</a>
                         </li>
 
                     </ul>
@@ -128,12 +130,22 @@
     <script src="~/js/UsuariosSemPerfil.js"></script>
     <script src="~/js/DataDeSalaDisponivel.js"></script>
     <script src="~/js/consultaCep.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover({
+
+                title: 'Usuários sem Perfil',
+                html: true,
+                content: '<p><a href="/SiteGestaoS/PerfilUsuarios/Create" >Clique aqui</a> para visualiza-lós.</p >'
+            });
+        });
+    </script>
     <script src="~/js/dropdownmenu.js"></script>
-    <script src="~/js/bootstrap-datepicker.min.js"></script>
-    <script src="~/js/bootstrap-datepicker.pt-BR.min.js"></script>
-    <script src="~/js/DataPicker.js"></script>
+    
     <script src="~/js/jquery.maskedinput.js"></script>
     <script src="~/js/tilt.jquery.min.js"></script>
+    <script src="~/js/TrocarImagem.js"></script>
     <script>
         $('.js-tilt').tilt({
             scale: 1.1
@@ -142,16 +154,19 @@
     <script>
         $('#aguarde').hide();
     </script>
-    <script>
-        $(function () {
-            $('[data-toggle="popover"]').popover({
+    @*<script>
+        $(document).ready(function () {
+            if (@TempData["QtdeSemPerfil"] == "") {
+                $('#QtdePerfil').val(0);
+            }
+            else {
+                var valor = @TempData["QtdeSemPerfil"];
 
-                title: 'Usuários sem Perfil',
-                html: true,
-                content: '<p><a href="/PerfilUsuarios/Create" >Clique aqui</a> para visualiza-lós.</p >'
-            });
+                $('#QtdePerfil').val(valor);
+        }
         });
-    </script>
+    </script>*@
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

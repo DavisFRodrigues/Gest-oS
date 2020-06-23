@@ -30,7 +30,7 @@ namespace GestaoS
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-               
+
                options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -40,8 +40,11 @@ namespace GestaoS
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.Configure<IISOptions>(o => { o.ForwardClientCertificate = false; });
-            
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AutomaticAuthentication = false;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

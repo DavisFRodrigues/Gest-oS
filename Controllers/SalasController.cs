@@ -8,10 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using GestaoS.Data;
 using GestaoS.Models;
 using GestaoS.Models.ViewModel;
+using Microsoft.Data.SqlClient;
+using Dapper;
 
 namespace GestaoS.Controllers
 {
-    public class SalasController : Controller
+    public class SalasController : BaseController
     {
         private readonly ApplicationDbContext _context;
 
@@ -21,8 +23,17 @@ namespace GestaoS.Controllers
         }
 
         // GET: Salas1
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+
+            var temAcesso = await Usuario_Tem_Acesso("Tela de Sala", _context);
+
+            if (!temAcesso)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+
 
             var applicationDbContext = _context.Sala.Include(p => p.Filial);
 
@@ -58,38 +69,87 @@ namespace GestaoS.Controllers
 
             }
 
+            var conn = new SqlConnection(@"Integrated Security=SSPI;Persist Security Info=False;User ID=DAVIS;Initial Catalog=GestaoS;Data Source=DAVIS-RODRIGUES");
+            using (conn)
+            {
+                conn.Open();
+
+
+
+                var ListaSemPerfilQr = conn.Query(@"SELECT NOMECOMPLETO FROM ASPNETUSERS (NOLOCK)
+                                                    WHERE NOT EXISTS(SELECT USERID FROM PerfilUsuario(NOLOCK) WHERE AspNetUsers.Id = UserId)
+                                                    ORDER BY NomeCompleto").ToList();
+
+                conn.Close();
+
+                var Valor = ListaSemPerfilQr.Count();
+
+                var Qtde = Valor.ToString();
+
+                var QtdeUsuario = int.Parse(Qtde);
+
+
+                TempData["QtdeSemPerfil"] = QtdeUsuario;
+
+
+            }
 
             return View(listaSalaVM);
         }
 
         // GET: Salas1/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var sala = await _context.Sala
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (sala == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdFilial"] = new SelectList(_context.Set<Filial>(), "Id", "Nome", sala.IdFilial);
-            return View(sala);
-        }
+        //    var sala = await _context.Sala
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (sala == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["IdFilial"] = new SelectList(_context.Set<Filial>(), "Id", "Nome", sala.IdFilial);
+        //    return View(sala);
+        //}
 
         // GET: Salas1/Create
         public IActionResult Create()
         {
+
+            var conn = new SqlConnection(@"Integrated Security=SSPI;Persist Security Info=False;User ID=DAVIS;Initial Catalog=GestaoS;Data Source=DAVIS-RODRIGUES");
+            using (conn)
+            {
+                conn.Open();
+
+
+
+                var ListaSemPerfilQr = conn.Query(@"SELECT NOMECOMPLETO FROM ASPNETUSERS (NOLOCK)
+                                                    WHERE NOT EXISTS(SELECT USERID FROM PerfilUsuario(NOLOCK) WHERE AspNetUsers.Id = UserId)
+                                                    ORDER BY NomeCompleto").ToList();
+
+                conn.Close();
+
+                var Valor = ListaSemPerfilQr.Count();
+
+                var Qtde = Valor.ToString();
+
+                var QtdeUsuario = int.Parse(Qtde);
+
+
+                TempData["QtdeSemPerfil"] = QtdeUsuario;
+
+
+            }
+
             ViewData["IdFilial"] = new SelectList(_context.Set<Filial>(), "Id", "Nome");
             return View();
         }
 
         // POST: Salas1/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nome,Capacidade,IdFilial,Multimidia,Wifi")] Sala sala)
@@ -123,8 +183,7 @@ namespace GestaoS.Controllers
         }
 
         // POST: Salas1/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Capacidade,IdFilial,Multimidia,Wifi")] Sala sala)

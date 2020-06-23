@@ -42,7 +42,7 @@
                 Tel.Responsável
             </th>
             <th>
-               Setor
+                Setor
             </th>
             <th></th>
         </tr>
@@ -131,23 +131,286 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            console.log("Iniciou");
+            console.log("Iniciou - James");
             $(".btnEdit").click(function () {
 
                 var id = $(this).data("value");
 
                 console.log(id);
 
-                $('#ConteudoModal').load('/LocaSalas/Edit/' + id, function () {
+                $('#ConteudoModal').load('/SiteGestaoS/LocaSalas/Edit/' + id, function () {
 
                     $('#ExemploModalCentralizado').modal();
 
-                });
+
+                     $(function () {
+                     if('@TempData["msg"]' != "") {
+                         $('#myModal').modal('show');
+                         }
+                     });
+
+                    /////////////SALA POR FILIAL   /////////////////////////////
+
+
+                    $(document).ready(function () {
+
+                        $.ajax({
+                            url: '/SiteGestaoS/LocaSalas/ObterListaLocacaoSalaEdit/',
+                            type: "GET",
+                            dataType: "json",
+                            data: {
+                                idLocacaoEdit: id
+                            },
+                            success: function (data) {
+
+                                if (data.length > 0) {
+
+                                    //for (var i = 0; i < data.length; i++) {
 
 
 
+                                    $(data).each(function () {
+                                        $("#IdSalaBusca").append($('<option value=0></option>', { value: this.ID }).html(this.Nome));
+                                        //$("#IdSalaBusca").append($('<option></option>', { value: this.ID }).html(this.Nome));
+                                    });
+
+                                    //}
+
+                                }
+                            },
+
+
+                            error: function (data) {
+                                // em caso de erro...
+                                console.log(error);
+                            },
+
+                            complete: function () {
+                                // ao final da requisição...
+                                $("#carregando").hide();
+                            }
+
+
+                        });
+
+
+                    });
+
+
+
+
+                    $(document).ready(function () {
+                        $('#IdFilialBusca').change(function () {
+                            var idFilial = $('#IdFilialBusca').val();
+
+                            if (idFilial !== this.IdFilial) {
+
+                                $.ajax({
+                                    url: '/SiteGestaoS/LocaEquipamentoes/ObterSala/',
+                                    type: "GET",
+                                    dataType: "json",
+                                    data: {
+                                        idFilial: idFilial
+                                    },
+                                    success: function (data) {
+
+                                        if (data.length > 0) {
+
+                                           
+                                            for (var i = 0; i < data.length; i++) {
+
+                                                $('#IdSalaBusca').empty();
+                                                // $('#IdSalaBusca').append('<option value="' + data[i].id + '">' + data[i].nome + '</option>');
+
+                                                $("#IdSalaBusca").append('<option value=0>Selecione uma Sala</option>');
+                                                $(data).each(function () {
+                                                    $("#IdSalaBusca").append($('<option></option>', { value: this.id }).html(this.nome));
+                                                });
+
+                                            }
+
+                                            console.log('Davis' + data[0].ID);
+
+                                        }
+                                    },
+
+
+                                    error: function (data) {
+                                        // em caso de erro...
+                                        console.log(error);
+                                    },
+
+                                    complete: function () {
+                                        // ao final da requisição...
+                                        $("#carregando").hide();
+                                    }
+
+
+                                });
+                            }
+
+                        });
+                    });
+                    /////////////////////////////////////
+
+
+                    $('#DataLocacao').datepicker({
+
+                        format: 'dd/mm/yyyy',
+                        ////dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
+                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                        ////dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        ////monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        ////monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        language: "pt-BR",
+                        startDate: '+0',
+                    });
+
+                    //$("#DataLocacao").change(function () {
+                        
+                    //    var newDate = $("#DataLocacao").datepicker().val(); //{ dateFormat: 'dd,MM,yyyy' }
+                    //    console.log('Data selecionada: ', newDate);
+                        
+                    //    $.ajax({
+                    //        url: '/SiteGestaoS/LocaSalas/DataLocacaoSalaEdit/',
+                    //        type: "GET",
+                    //        dataType: "json",
+                    //        data: {
+                    //            idLocacaoEdit: id,
+                    //            DataLocacao: newDate
+                    //        },
+                    //        success: function (data) {
+
+                    //            if (data.length > 0) {
+                                    
+
+                    //                var Disponivel = data[0].DATA_DISPONIVEL
+
+
+
+                    //                var dataL = new Date(Disponivel).toLocaleString('pt-BR').split(' ');
+                    //                alert('A próxima data que esta sala estará liberada é: ' + dataL[0]);
+
+                                    
+                    //            }
+                    //        },
+
+
+                    //        error: function (data) {
+                    //            // em caso de erro...
+                    //            console.log(error);
+                    //        },
+
+                    //        complete: function () {
+                    //            // ao final da requisição...
+                    //            $("#carregando").hide();
+                    //        }
+
+
+                    //    });
+
+                        $(document).ready(function () {
+                            $('#IdSalaBusca').change(function () {
+
+                                var IdSala = $('#IdSalaBusca').val();
+                                $('#DataLocacao').change(function () {
+
+                                    var DtLocacao = $('#DataLocacao').val();
+
+                                    console.log(IdSala);
+                                    console.log(DtLocacao);
+                                    if (IdSala > 0) {
+
+                                        $.ajax({
+                                            url: '/SiteGestaoS/LocaSalas/DataLocacaoSala/',
+                                            type: "GET",
+                                            dataType: "json",
+                                            data: {
+                                                idSalaData: IdSala,
+                                                DataLocacao: DtLocacao
+                                            },
+                                            success: function (data) {
+
+
+                                                if (data.length > 0) {
+                                                    console.log(data[0].DATA_DISPONIVEL);
+
+                                                    var Disponivel = data[0].DATA_DISPONIVEL
+
+
+                                                    var dataL = new Date(Disponivel).toLocaleString('pt-BR').split(' ');
+                                                    alert('A próxima data que esta sala estará liberada é: ' + dataL[0]);
+                                                                                      
+
+
+                                                    
+
+
+
+
+                                                }
+
+
+                                            },
+
+
+                                            error: function (data) {
+                                                // em caso de erro...
+                                                console.log(error);
+                                            },
+
+                                            complete: function () {
+                                                // ao final da requisição...
+                                                $("#carregando").hide();
+                                            }
+
+
+                                        });
+                                    }
+
+                                });
+                            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                       
+                    });
+                    $('#DataFim').datepicker({
+
+                        format: 'dd/mm/yyyy',
+                        //dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
+                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                        //dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        //monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        //monthNamesShort ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        language: "pt-BR",
+                        startDate: '+0'
+                    });
+
+                });        
+                                       
+    
+                    
+               
             });
         });
+
+
 
 
 
@@ -162,18 +425,15 @@
 
                 console.log(id);
 
-                $('#ConteudoModal').load('/LocaSalas/Delete/' + id, function () {
+                $('#ConteudoModal').load('/SiteGestaoS/LocaSalas/Delete/' + id, function () {
 
                     $('#ExemploModalCentralizado').modal();
 
+
+
                 });
-
-
-
             });
         });
-
-
 
     </script>
     <script type="text/javascript">

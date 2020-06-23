@@ -1,3 +1,6 @@
-﻿/*#aguarde div {
-    display:none;
-}*/
+﻿#aguarde div {
+    float: right;
+    position: relative;
+    top: -46px;
+    margin-right: -10px;
+}

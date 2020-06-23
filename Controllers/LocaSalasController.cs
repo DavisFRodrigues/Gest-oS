@@ -2,13 +2,11 @@
 using GestaoS.Data;
 using GestaoS.Models;
 using GestaoS.Models.ViewModel;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,32 +30,25 @@ namespace GestaoS.Controllers
         public IActionResult Index()
         {
 
-            ////var temAcesso = await Usuario_Tem_Acesso("Tela Locação Sala", _context);
-
-            ////if (!temAcesso)
-            ////{
-            ////    return RedirectToAction("Index", "Home");
-            ////}
-
             var applicationDbContext = _context.LocaSala.Include(p => p.Filial).Include(p => p.Sala).Include(p => p.ApplicationUser);
 
             var listaSala = (from LCSL in _context.LocaSala
-                                    join FL in _context.Filial on LCSL.IdFilial equals FL.Id
-                                    join SL in _context.Sala on LCSL.IdSala equals SL.Id
-                                    join APUS in _context.Users on LCSL.UserId equals APUS.Id
-                                    select
-                                    new
-                                    {
-                                        LCSL.Id,
-                                        NomeFilial = FL.Nome,
-                                        NomeSala = SL.Nome,
-                                        LCSL.DtInicio,
-                                        LCSL.DtFim,
-                                        APUS.NomeCompleto,
-                                        LCSL.TelResponsavel,
-                                        LCSL.Setor
+                             join FL in _context.Filial on LCSL.IdFilial equals FL.Id
+                             join SL in _context.Sala on LCSL.IdSala equals SL.Id
+                             join APUS in _context.Users on LCSL.UserId equals APUS.Id
+                             select
+                             new
+                             {
+                                 LCSL.Id,
+                                 NomeFilial = FL.Nome,
+                                 NomeSala = SL.Nome,
+                                 LCSL.DtInicio,
+                                 LCSL.DtFim,
+                                 APUS.NomeCompleto,
+                                 LCSL.TelResponsavel,
+                                 LCSL.Setor
 
-                                    }).ToList();
+                             }).ToList();
 
             List<LocaSalaViewModel> listaLocacaoSala = new List<LocaSalaViewModel>();
 
@@ -79,22 +70,34 @@ namespace GestaoS.Controllers
             }
 
 
+            var conn = new SqlConnection(@"Integrated Security=SSPI;Persist Security Info=False;User ID=DAVIS;Initial Catalog=GestaoS;Data Source=DAVIS-RODRIGUES");
+            using (conn)
+            {
+                conn.Open();
 
 
 
+                var ListaSemPerfilQr = conn.Query(@"SELECT NOMECOMPLETO FROM ASPNETUSERS (NOLOCK)
+                                                    WHERE NOT EXISTS(SELECT USERID FROM PerfilUsuario(NOLOCK) WHERE AspNetUsers.Id = UserId)
+                                                    ORDER BY NomeCompleto").ToList();
+
+                conn.Close();
+
+                var Valor = ListaSemPerfilQr.Count();
+
+                var Qtde = Valor.ToString();
+
+                var QtdeUsuario = int.Parse(Qtde);
 
 
+                TempData["QtdeSemPerfil"] = QtdeUsuario;
 
 
+            }
 
 
-
-
-            //ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "NomeCompleto").FirstOrDefault().Text;
-            //ViewBag.IdFilial = new SelectList(_context.Set<Filial>(), "Id", "Nome").FirstOrDefault().Text;
-            //ViewBag.IdSala = new SelectList(_context.Set<Sala>(), "Id", "Nome").FirstOrDefault().Text;
-
-            return View(listaLocacaoSala);// await _context.LocaSala.ToListAsync());
+            return View(listaLocacaoSala);
+        
         }
 
         // GET: LocaSalas/Details/5
@@ -118,6 +121,32 @@ namespace GestaoS.Controllers
         // GET: LocaSalas/Create
         public IActionResult Create()
         {
+            var conn = new SqlConnection(@"Integrated Security=SSPI;Persist Security Info=False;User ID=DAVIS;Initial Catalog=GestaoS;Data Source=DAVIS-RODRIGUES");
+            using (conn)
+            {
+                conn.Open();
+
+
+
+                var ListaSemPerfilQr = conn.Query(@"SELECT NOMECOMPLETO FROM ASPNETUSERS (NOLOCK)
+                                                    WHERE NOT EXISTS(SELECT USERID FROM PerfilUsuario(NOLOCK) WHERE AspNetUsers.Id = UserId)
+                                                    ORDER BY NomeCompleto").ToList();
+
+                conn.Close();
+
+                var Valor = ListaSemPerfilQr.Count();
+
+                var Qtde = Valor.ToString();
+
+                var QtdeUsuario = int.Parse(Qtde);
+
+
+                TempData["QtdeSemPerfil"] = QtdeUsuario;
+
+
+            }
+
+
             ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "NomeCompleto").ToList();
             ViewData["IdFilial"] = new SelectList(_context.Set<Filial>(), "Id", "Nome").ToList();
             ViewData["IdSala"] = new SelectList(_context.Set<Sala>(), "Id", "Nome").ToList();
@@ -125,11 +154,10 @@ namespace GestaoS.Controllers
         }
 
         // POST: LocaSalas/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdFilial,IdSala,DtInicio,DtFim,UserId,TelResponsavel,Setor")] LocaSala locaSala)
+        public async  Task<IActionResult> Create([Bind("Id,IdFilial,IdSala,DtInicio,DtFim,UserId,TelResponsavel,Setor")] LocaSala locaSala)
         {
             if (ModelState.IsValid)
             {
@@ -155,7 +183,7 @@ namespace GestaoS.Controllers
             {
                 return NotFound();
             }
-            
+
             ViewBag.IdFilial = new SelectList(_context.Set<Filial>(), "Id", "Nome", locaSala.IdFilial);
             ViewBag.IdSala = new SelectList(_context.Set<Sala>(), "Id", "Nome", locaSala.IdSala);
             ViewBag.UserId = new SelectList(_context.Set<ApplicationUser>(), "Id", "NomeCompleto", locaSala.UserId);
@@ -163,8 +191,7 @@ namespace GestaoS.Controllers
         }
 
         // POST: LocaSalas/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,IdFilial,IdSala,DtInicio,DtFim,UserId,TelResponsavel,Setor")] LocaSala locaSala)
@@ -182,10 +209,10 @@ namespace GestaoS.Controllers
                     //var userid = User.Claims.First().Value;
 
 
-                    
+
                     var idPerfil = ObterPerfil();
 
-                    
+
                     var idAlteracao = ObterLocacaoPorUsuario(id);
 
                     if (idPerfil == 1 && idAlteracao == 1)
@@ -200,7 +227,7 @@ namespace GestaoS.Controllers
                     }
                     else
                     {
-                        
+
                         TempData["msg"] = "Você não tem permissão para alterar registro de outros usuários.";
 
                         return RedirectToAction("Index");
@@ -240,11 +267,11 @@ namespace GestaoS.Controllers
                 return NotFound();
             }
 
-            
 
-            ViewBag.IdFilial = new SelectList(_context.Filial.Where(p=> p.Id == locaSala.IdFilial), "Id", "Nome").FirstOrDefault().Text;
+
+            ViewBag.IdFilial = new SelectList(_context.Filial.Where(p => p.Id == locaSala.IdFilial), "Id", "Nome").FirstOrDefault().Text;
             ViewBag.IdSala = new SelectList(_context.Sala.Where(p => p.Id == locaSala.IdSala), "Id", "Nome").FirstOrDefault().Text;
-            ViewBag.UserId = new SelectList(_context.Set<ApplicationUser>(), "Id", "NomeCompleto",locaSala.UserId).FirstOrDefault().Value;
+            ViewBag.UserId = new SelectList(_context.Set<ApplicationUser>(), "Id", "NomeCompleto", locaSala.UserId).FirstOrDefault().Value;
             return PartialView(locaSala);
 
 
@@ -292,7 +319,7 @@ namespace GestaoS.Controllers
 
 
 
-          
+
         }
 
         private bool LocaSalaExists(int id)
@@ -320,7 +347,7 @@ namespace GestaoS.Controllers
                 return int.Parse(PerfilUsuario);
 
             }
- 
+
         }
 
 
@@ -337,7 +364,7 @@ namespace GestaoS.Controllers
                 var IdUsuario = User.Claims.First().Value;
 
                 var IdLocacaoSalaU = conn.Query(@"SELECT ISNULL(Id,0) AS ID FROM LocacaoSala
-                                                  WHERE Id = @id and UserId = @IdUsuarioP", new { IdUsuarioP = IdUsuario,ID = id }).ToList();
+                                                  WHERE Id = @id and UserId = @IdUsuarioP", new { IdUsuarioP = IdUsuario, ID = id }).ToList();
 
                 conn.Close();
                 var IdLocacaoSalaUSer = IdLocacaoSalaU.Count();
@@ -359,16 +386,16 @@ namespace GestaoS.Controllers
             {
                 conn.Open();
 
-                
+
 
                 var NomeFilialQr = conn.Query(@"SELECT Filial.Nome FROM 
                                                   LocacaoSala (NOLOCK)
                                                   INNER JOIN Filial ON Filial.Id = IdFilial 
                                                   WHERE LocacaoSala.Id = @ID", new { ID = id }).FirstOrDefault().Nome;
-                                                  
+
                 conn.Close();
-                var NomeFilial =  NomeFilialQr[0];
-                
+                var NomeFilial = NomeFilialQr[0];
+
                 return int.Parse(NomeFilial);
 
             }
@@ -395,6 +422,42 @@ namespace GestaoS.Controllers
 
                 var DataSlDisponivel = conn.Query(@"SELECT DATEADD(DAY,1,DataFim) AS DATA_DISPONIVEL FROM LocacaoSala
                  WHERE @Data BETWEEN DataInicio AND DataFim AND  LocacaoSala.IdSala = @IdSala", new { IdSala = IdSalaL, Data = DataLocacaoP }).ToList();
+
+                conn.Close();
+
+                return Json(DataSlDisponivel);
+
+            }
+
+
+
+        }
+
+
+        [HttpGet]
+        public JsonResult DataLocacaoSalaEdit(string DataLocacao, int idLocacaoEdit)
+        {
+
+
+            var conn = new SqlConnection(@"Integrated Security=SSPI;Persist Security Info=False;User ID=DAVIS;Initial Catalog=GestaoS;Data Source=DAVIS-RODRIGUES");
+            using (conn)
+            {
+                conn.Open();
+
+                var IdSalaL = idLocacaoEdit;
+                
+                var ano = DataLocacao.Substring(6);
+
+                var dia = DataLocacao.Substring(0,2);
+
+                var mes = DataLocacao.Substring(3, 2);
+
+                var DataLocacaoP = ano + "-" + mes + "-" + dia;
+
+                var DataSlDisponivel = conn.Query(@"
+                                                   select DATEADD(DAY,1,INICIO.DataFim) AS DATA_DISPONIVEL,INICIO.IdSala from LocacaoSala AS INICIO
+                                                   where Id = @IdSala
+                                                   and not EXISTS(select * from LocacaoSala where IdSala = INICIO.IdSala  and cast(@Data as date) not BETWEEN cast(DataInicio as date) AND cast(DataFim as date))", new { IdSala = IdSalaL, Data = DataLocacaoP }).ToList();
 
                 conn.Close();
 
@@ -434,8 +497,36 @@ namespace GestaoS.Controllers
 
         }
 
-        
-       
+        [HttpGet]
+        public JsonResult ObterListaLocacaoSalaEdit(int idLocacaoEdit)
+        {
+
+            var conn = new SqlConnection(@"Integrated Security=SSPI;Persist Security Info=False;User ID=DAVIS;Initial Catalog=GestaoS;Data Source=DAVIS-RODRIGUES");
+            using (conn)
+            {
+                conn.Open();
+
+                var IdLocacaoEd = idLocacaoEdit;
+
+                var SalaOnload = conn.Query(@"  SELECT LISTA_SALA.IdFilial,LISTA_SALA.ID,LISTA_SALA.Nome from (
+                                                SELECT sala.IdFilial,sala.Id,Nome,LocacaoSala.IdSala as SalaLocacao, 
+                                                CASE WHEN sala.Id = LocacaoSala.IdSala THEN 1 ELSE 0 END AS COMPARACAO    
+                                                FROM Sala
+                                                INNER JOIN LocacaoSala on LocacaoSala.IdFilial = sala.IdFilial
+                                                WHERE LocacaoSala.Id = @idLoca) AS LISTA_SALA
+                                                ORDER BY	LISTA_SALA.COMPARACAO DESC
+                                                ", new { idLoca = IdLocacaoEd }).ToList();
+
+                conn.Close();
+
+                return Json(SalaOnload);
+
+            }
+
+
+
+        }
+
 
 
     }

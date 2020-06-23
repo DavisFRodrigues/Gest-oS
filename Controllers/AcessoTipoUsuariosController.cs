@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GestaoS.Data;
 using GestaoS.Models;
+using Microsoft.Data.SqlClient;
+using Dapper;
 
 namespace GestaoS.Controllers
 {
@@ -29,39 +31,90 @@ namespace GestaoS.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            var conn = new SqlConnection(@"Integrated Security=SSPI;Persist Security Info=False;User ID=DAVIS;Initial Catalog=GestaoS;Data Source=DAVIS-RODRIGUES");
+            using (conn)
+            {
+                conn.Open();
+
+
+
+                var ListaSemPerfilQr = conn.Query(@"SELECT NOMECOMPLETO FROM ASPNETUSERS (NOLOCK)
+                                                    WHERE NOT EXISTS(SELECT USERID FROM PerfilUsuario(NOLOCK) WHERE AspNetUsers.Id = UserId)
+                                                    ORDER BY NomeCompleto").ToList();
+
+                conn.Close();
+
+                var Valor = ListaSemPerfilQr.Count();
+
+                var Qtde = Valor.ToString();
+
+                var QtdeUsuario = int.Parse(Qtde);
+
+
+                TempData["QtdeSemPerfil"] = QtdeUsuario;
+
+
+            }
+
             var applicationDbContext = _context.AcessoTipoUsuario.Include(a => a.TipoUsuario);
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: AcessoTipoUsuarios/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var acessoTipoUsuario = await _context.AcessoTipoUsuario
-                .Include(a => a.TipoUsuario)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (acessoTipoUsuario == null)
-            {
-                return NotFound();
-            }
+        //    var acessoTipoUsuario = await _context.AcessoTipoUsuario
+        //        .Include(a => a.TipoUsuario)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (acessoTipoUsuario == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(acessoTipoUsuario);
-        }
+        //    return View(acessoTipoUsuario);
+        //}
 
         // GET: AcessoTipoUsuarios/Create
         public IActionResult Create()
         {
+
+            var conn = new SqlConnection(@"Integrated Security=SSPI;Persist Security Info=False;User ID=DAVIS;Initial Catalog=GestaoS;Data Source=DAVIS-RODRIGUES");
+            using (conn)
+            {
+                conn.Open();
+
+
+
+                var ListaSemPerfilQr = conn.Query(@"SELECT NOMECOMPLETO FROM ASPNETUSERS (NOLOCK)
+                                                    WHERE NOT EXISTS(SELECT USERID FROM PerfilUsuario(NOLOCK) WHERE AspNetUsers.Id = UserId)
+                                                    ORDER BY NomeCompleto").ToList();
+
+                conn.Close();
+
+                var Valor = ListaSemPerfilQr.Count();
+
+                var Qtde = Valor.ToString();
+
+                var QtdeUsuario = int.Parse(Qtde);
+
+
+                TempData["QtdeSemPerfil"] = QtdeUsuario;
+
+
+            }
+
+
             ViewData["IdTipoUsuario"] = new SelectList(_context.Set<TipoUsuario>(), "Id", "NomeTipoUsuario");
             return View();
         }
 
         // POST: AcessoTipoUsuarios/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,NomeFuncionalidade,IdTipoUsuario")] AcessoTipoUsuario acessoTipoUsuario)
@@ -94,8 +147,7 @@ namespace GestaoS.Controllers
         }
 
         // POST: AcessoTipoUsuarios/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,NomeFuncionalidade,IdTipoUsuario")] AcessoTipoUsuario acessoTipoUsuario)

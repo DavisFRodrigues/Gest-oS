@@ -1,0 +1,219 @@
+﻿@model IEnumerable<GestaoS.Models.Devolucao>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .table {
+        white-space: nowrap;
+        font-size: 14px;
+    }
+</style>
+
+<h1>Devolução Equipamento</h1>
+
+<p>
+    @*   <a asp-action="Create">Create New</a>*@
+</p>
+<table id="tabela" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Id Locação
+            </th>
+            <th>
+                Nome Equipamento
+            </th>
+            <th>
+                Patrimonio
+            </th>
+            <th>
+                Data Início
+            </th>
+            <th>
+                Data Fim
+            </th>
+            <th>
+                Nome
+            </th>
+            <th>
+                Devolvido
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdLocaEquipamento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomeEquipamento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NmPatrimonio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataInicio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataFim)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomeCompleto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Devolvido)
+                </td>
+                <td>
+                    <div class="Botao">
+                        <a class="btn btn-warning btnEdit btn-sm" data-value="@item.Id"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a> |
+                        <a class="btn btn-danger btnDelete btn-sm" data-value="@item.Id"><i class="fa fa-trash fa-fw" aria-hidden="true"></i></a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="ExemploModalCentralizado" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <div id="ConteudoModal">
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            console.log("Iniciou");
+            $(".btnEdit").click(function () {
+
+                var id = $(this).data("value");
+
+                console.log(id);
+
+                $('#ConteudoModal').load('/SiteGestaoS/Devolucaos/Edit/' + id, function () {
+
+                    $('#ExemploModalCentralizado').modal();
+
+
+                    
+
+                    $('#DataLocacao').datepicker({
+
+                        format: 'dd/mm/yyyy',
+                        ////dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
+                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                        ////dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        ////monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        ////monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        language: "pt-BR",
+                        startDate: '+0'
+                    });
+                    $('#DataFim').datepicker({
+
+                        format: 'dd/mm/yyyy',
+                        //dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
+                        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                        //dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                        //monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        //monthNamesShort ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        language: "pt-BR",
+                        startDate: '+0'
+                    });
+
+                });
+
+
+
+            });
+        });
+
+
+
+
+
+    </script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            console.log("Iniciou");
+            $(".btnDelete").click(function () {
+
+                var id = $(this).data("value");
+
+                console.log(id);
+
+                $('#ConteudoModal').load('/SiteGestaoS/Devolucaos/Delete/' + id, function () {
+
+                    $('#ExemploModalCentralizado').modal();
+
+
+
+                });
+            });
+        });
+
+    </script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#tabela').dataTable({
+
+                "bJQueryUI": true,
+                "oLanguage": {
+                    "sProcessing": "Processando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "Não foram encontrados resultados",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando de 0 até 0 de 0 registros",
+                    "sInfoFiltered": "",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "Primeiro",
+                        "sPrevious": "Anterior",
+                        "sNext": "Seguinte",
+                        "sLast": "Último"
+                    }
+                }
+
+            });
+        });
+
+
+    </script>
+
+    <script>
+
+        $(function () {
+            if('@TempData["msg"]' != "") {
+                $('#myModal').modal('show');
+            }
+        });
+
+    </script>
+}

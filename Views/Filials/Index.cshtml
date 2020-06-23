@@ -119,9 +119,65 @@
 
                 console.log(id);
 
-                $('#ConteudoModal').load('/Filials/Edit/' + id, function () {
+                $('#ConteudoModal').load('/SiteGestaoS/Filials/Edit/' + id, function () {
 
                     $('#ExemploModalCentralizado').modal();
+
+
+                    $(document).ready(function () {
+
+                        $('#aguarde').hide();
+
+                        $('#cep').blur(function (e) {
+                            var cep = $('#cep').val();
+                            $('#aguarde').show();
+                            var url = "https://viacep.com.br/ws/" + cep + "/json/";
+                            var retorno = pesquisaCEP(url);
+
+
+                        });
+
+                        function pesquisaCEP(endereco) {
+
+                            $.ajax({
+                                type: "GET",
+                                url: endereco,
+                                async: true,
+                                beforeSend: function () {//Chama a função para mostrar a imagem gif de loading antes do carregamento
+                                    $('#aguarde').show();
+                                }
+                            }).done(function (data) {
+
+
+
+                                $('#bairro').val(data.bairro);
+                                $('#endereco').val(data.logradouro);
+                                $('#cidade').val(data.localidade);
+                                $('#estado').val(data.uf);
+                                $('#aguarde').hide();
+
+                            }).fail(function () {
+                                console.log("erro");
+                                $('#aguarde').hide();
+                            });
+                        }
+
+
+                    });
+
+
+
+
+
+
+
+
+
+                    $(function () {
+                        $('#tel').mask("(99)99999-9999");
+                        $('#cep').mask("99999-999");
+
+                    });
 
                 });
 
@@ -143,9 +199,16 @@
 
                 console.log(id);
 
-                $('#ConteudoModal').load('/Filials/Delete/' + id, function () {
+                $('#ConteudoModal').load('/SiteGestaoS/Filials/Delete/' + id, function () {
 
                     $('#ExemploModalCentralizado').modal();
+
+
+                    $(function () {
+                        $('#tel').mask("(99)99999-9999");
+                        $('#cep').mask("99999-999");
+
+                    });
 
                 });
 

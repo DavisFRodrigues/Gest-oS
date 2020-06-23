@@ -23,7 +23,7 @@
         <div id="login-box">
             <div id="login-box_interno">
                 <section>
-                    <form id="account" method="post">
+                    <form id="account" method="post" autocomplete="off">
                         <h1>@ViewData["Title"]</h1>
                         <hr />
                         <div asp-validation-summary="All" class="text-danger"></div>
@@ -77,4 +77,13 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#input').validate({
+            lang:'pt-BR'
+        });
+
+    });
+</script>
 }

@@ -24,7 +24,7 @@
                 <select id="IdSalaBusca" asp-for="IdSala" class="form-control"></select>
                 <span asp-validation-for="IdSala" class="text-danger"></span>
             </div>
-            <div class="form-group datepicker">
+            <div class="form-group date">
                 <label asp-for="DtInicio" class="control-label"></label>
                 <input asp-for="DtInicio" type="text" class="form-control" id="DataLocacao" />
                 <span asp-validation-for="DtInicio" class="fa fa-calendar" id="spanCalendar"></span>
@@ -42,7 +42,7 @@
             <div class="form-group">
                 <label asp-for="TelResponsavel" class="control-label"></label>
                 <input asp-for="TelResponsavel" class="form-control" id="tel" />
-              
+
                 <span asp-validation-for="TelResponsavel" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -50,7 +50,7 @@
                 <input asp-for="Setor" class="form-control" />
                 <span asp-validation-for="Setor" class="text-danger"></span>
             </div>
-           <div class="form-group">
+            <div class="form-group">
                 <input type="submit" value="Cradastrar" class="btn btn-primary" />
             </div>
         </form>
@@ -86,4 +86,201 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+
+    <script type="text/javascript">
+
+
+        $(function () {
+            $('#DataLocacao').datepicker({
+
+                format: 'dd/mm/yyyy',
+                ////dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
+                ////dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                ////dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                ////monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                ////monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                language: "pt-BR",
+                startDate: '+0'
+            });
+
+        });
+
+        $(function () {
+
+            $('#DataFim').datepicker({
+
+                format: 'dd/mm/yyyy',
+                ////dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
+                ////dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                ////dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                ////monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                ////monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                language: "pt-BR",
+                startDate: '+0'
+            });
+        });
+
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#IdSalaBusca').change(function () {
+
+                var IdSala = $('#IdSalaBusca').val();
+                $('#DataLocacao').change(function () {
+
+                    var DtLocacao = $('#DataLocacao').val();
+
+                    console.log(IdSala);
+                    console.log(DtLocacao);
+                    if (IdSala > 0) {
+
+                        $.ajax({
+                            url: '/SiteGestaoS/LocaSalas/DataLocacaoSala/',
+                            type: "GET",
+                            dataType: "json",
+                            data: {
+                                idSalaData: IdSala,
+                                DataLocacao: DtLocacao
+                            },
+                            success: function (data) {
+
+
+                                if (data.length > 0) {
+                                    console.log(data[0].DATA_DISPONIVEL);
+
+                                    var Disponivel = data[0].DATA_DISPONIVEL
+
+
+                                    //if (Disponivel > quantiEqui) {
+
+
+
+                                    //}
+                                    //else {
+
+                                    //var dataL = new Date(Disponivel).toLocaleString('pt-BR').split(' ');
+                                    //alert('A próxima data que esta sala estará liberada é: ' + dataL[0]);
+
+                                    //}
+
+
+                                    $(function () {
+                                        var dataL = new Date(Disponivel).toLocaleString('pt-BR').split(' ');
+                                        $('#TextAlertData').text("A próxima data que esta sala estará liberada é: " + dataL[0]);
+                                        $('#AlertData').modal('show');
+                                        //$('#DataLocacao').empty();
+                                        $('#DataLocacao').val() + 1;
+
+                                    });
+
+
+
+
+                                }
+
+
+                            },
+
+
+                            error: function (data) {
+                                // em caso de erro...
+                                console.log(error);
+                            },
+
+                            complete: function () {
+                                // ao final da requisição...
+                                $("#carregando").hide();
+                            }
+
+
+                        });
+                    }
+
+                });
+            });
+        });
+
+
+
+
+
+
+
+
+        $('#IdSalaBusca').change(function () {
+
+            var IdSala = $('#IdSalaBusca').val();
+            $('#DataFim').change(function () {
+
+                var DtLocacao = $('#DataFim').val();
+
+                console.log(IdSala);
+                console.log(DtLocacao);
+                if (IdSala > 0) {
+
+                    $.ajax({
+                        url: '/SiteGestaoS/LocaSalas/DataLocacaoSalaFim/',
+                        type: "GET",
+                        dataType: "json",
+                        data: {
+                            idSalaData: IdSala,
+                            DtFimLocacaoS: DtLocacao
+                        },
+                        success: function (data) {
+
+
+                            if (data.length > 0) {
+                                console.log(data[0].DATA_DISPONIVEL);
+
+                                var Disponivel = data[0].DATA_DISPONIVEL
+
+
+                                //if (Disponivel > quantiEqui) {
+
+
+
+                                //}
+                                //else {
+
+                                //var dataL = new Date(Disponivel).toLocaleString('pt-BR').split(' ');
+                                //alert('A data fim que está sala estará liberada é: ' + dataL[0]);
+
+                                $(function () {
+                                    var dataL = new Date(Disponivel).toLocaleString('pt-BR').split(' ');
+                                    $('#TextAlertData').text("A data fim que está sala estará liberada é: " + dataL[0]);
+                                    $('#AlertData').modal('show');
+                                    //$('#DataLocacao').empty();
+                                    //$('#DataLocacao').val() + 1;
+
+                                });
+
+                            }
+
+
+                        },
+
+
+                        error: function (data) {
+                            // em caso de erro...
+                            console.log(error);
+                        },
+
+                        complete: function () {
+                            // ao final da requisição...
+                            $("#carregando").hide();
+                        }
+
+
+                    });
+                }
+
+            });
+        });
+
+
+
+
+
+    </script>
+ }

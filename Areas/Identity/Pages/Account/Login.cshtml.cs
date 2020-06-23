@@ -45,8 +45,9 @@ namespace GestaoS.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "O campo Email é obrigatório.")]
             [EmailAddress]
+            
             public string Email { get; set; }
 
             [Required]
@@ -100,7 +101,7 @@ namespace GestaoS.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Tentativa de login inválida, email ou senha incorreta.");
+                    ModelState.AddModelError(string.Empty, "Tentativa inválida, email ou senha incorreta.");
                     return Page();
                 }
             }

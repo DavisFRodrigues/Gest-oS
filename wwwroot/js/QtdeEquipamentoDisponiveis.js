@@ -9,7 +9,7 @@
             if (IdEquipamentoQtde > 0) {
 
                 $.ajax({
-                    url: '/LocaEquipamentoes/QtdeEquipamento/',
+                    url: '/SiteGestaoS/LocaEquipamentoes/QtdeEquipamento/',
                     type: "GET",
                     dataType: "json",
                     data: {
